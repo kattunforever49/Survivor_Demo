@@ -9,9 +9,9 @@
     html, body {
       margin: 0;
       padding: 0;
-      border: 0;
       background: #000;
       overflow: hidden;
+      text-align: center;
     }
     #unity-canvas {
       background: #231F20;
@@ -19,7 +19,8 @@
   </style>
 </head>
 <body>
-  <canvas id="unity-canvas" width="960" height="600" tabindex="-1"></canvas>
+  <canvas id="unity-canvas" width="960" height="600" tabindex="-1" style="width: 960px; height: 600px;"></canvas>
+
   <script src="Build/Web.loader.js"></script>
   <script>
     const canvas = document.querySelector("#unity-canvas");
@@ -29,35 +30,16 @@
     }
 
     if (isMobile()) {
-      // 嘗試鎖定橫向（可能失敗）
+      // 嘗試鎖定橫向
       if (screen.orientation && screen.orientation.lock) {
         screen.orientation.lock("landscape").catch((err) => {
           console.log("鎖定橫向失敗:", err);
         });
       }
 
-      // 設定旋轉樣式
-      function applyCanvasRotation() {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-
-        canvas.style.width = h + "px";
-        canvas.style.height = w + "px";
-        canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
-        canvas.style.transformOrigin = "center center";
-        canvas.style.position = "absolute";
-        canvas.style.top = "50%";
-        canvas.style.left = "50%";
-      }
-
-      applyCanvasRotation();
-      window.addEventListener('resize', applyCanvasRotation);
-    } else {
-      // 桌機版維持原尺寸
-      canvas.style.width = "960px";
-      canvas.style.height = "600px";
-      canvas.style.margin = "0 auto";
-      canvas.style.display = "block";
+      // 只旋轉，不調整大小或位置
+      canvas.style.transform = "rotate(90deg)";
+      canvas.style.transformOrigin = "center center";
     }
 
     // 建立 Unity 實例
