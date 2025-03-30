@@ -69,11 +69,11 @@
       canvas.style.position = "absolute";
       canvas.style.transformOrigin = "center center";
       canvas.aspectRatio = aspectRatio;
+      // canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
       canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
-      
     }
+    applyRotationAndResize();
 
-      window.addEventListener("resize", applyRotationAndResize);
     } else {
       // 桌機：使用 100% 填滿
       canvas.style.width = "100%";
