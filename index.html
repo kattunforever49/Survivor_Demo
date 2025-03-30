@@ -14,10 +14,12 @@
     }
 
     #unity-canvas {
-      background: #231F20;
+      background: #ffffff;
+      width: 100%;
+      height: 100%;
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 0;
+      left: 0;
       transform-origin: center center;
     }
   </style>
@@ -47,40 +49,15 @@
     }
 
     if (isMobile()) {
-      // 嘗試鎖定橫向
+      // 嘗試鎖定橫向顯示（可能被拒絕）
       if (screen.orientation && screen.orientation.lock) {
         screen.orientation.lock("landscape").catch(err => {
           console.log("鎖定橫向失敗：", err);
         });
       }
 
-      function applyRotationAndResize() {
-      // const screenW = window.innerWidth;
-      // const screenH = window.innerHeight;
-      // const aspectRatio = 960 / 600;
-
-      // const rotatedWidth = screenH;
-      // const rotatedHeight = screenH / aspectRatio;
-
-      // canvas.style.width = rotatedWidth + "px";
-      // canvas.style.height = rotatedHeight + "px";
-      // canvas.style.top = "50%";
-      // canvas.style.left = "50%";
-      // canvas.style.position = "absolute";
-      // canvas.style.transformOrigin = "center center";
-      // canvas.aspectRatio = 1.6;
-      // canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
-      canvas.style.transform = "rotate(90deg) ";
-    }
-    applyRotationAndResize();
-
-    } else {
-      // 桌機：使用 100% 填滿
-      canvas.style.width = "100%";
-      canvas.style.height = "100%";
-      canvas.style.top = "0";
-      canvas.style.left = "0";
-      canvas.style.position = "absolute";
+      // 手機上旋轉 canvas
+      canvas.style.transform = "rotate(90deg)";
     }
 
     startUnity();
