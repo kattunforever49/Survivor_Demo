@@ -8,13 +8,13 @@
   <link rel="stylesheet" href="TemplateData/style.css">
 
   <style>
-    /* 當裝置為直向時，隱藏 Unity 遊戲並顯示提示畫面 */
     @media screen and (orientation:portrait) {
       #rotateDeviceMessage {
         display: flex;
       }
       #unity-container {
-        display: none;
+        visibility: hidden;
+        pointer-events: none;
       }
     }
 
@@ -39,7 +39,6 @@
 </head>
 <body>
 
-  <!-- 直向螢幕提示 -->
   <div id="rotateDeviceMessage">請將裝置轉為橫向模式來遊玩遊戲</div>
 
   <div id="unity-container" class="unity-desktop">
@@ -108,6 +107,15 @@
 
     document.querySelector("#unity-loading-bar").style.display = "block";
 
+    // ⬇️ 加入觸控進入全螢幕的補救方案
+    document.addEventListener('touchend', () => {
+      if (canvas && document.fullscreenElement == null) {
+        canvas.requestFullscreen().catch(err => {
+          console.log("自動進入全螢幕失敗：", err);
+        });
+      }
+    }, { once: true });
+
     var script = document.createElement("script");
     script.src = loaderUrl;
     script.onload = () => {
@@ -115,6 +123,14 @@
         document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
       }).then((unityInstance) => {
         document.querySelector("#unity-loading-bar").style.display = "none";
+
+        // 嘗試讓手機裝置自動全螢幕（不一定成功）
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          setTimeout(() => {
+            unityInstance.SetFullscreen(1);
+          }, 100);
+        }
+
         document.querySelector("#unity-fullscreen-button").onclick = () => {
           unityInstance.SetFullscreen(1);
         };
