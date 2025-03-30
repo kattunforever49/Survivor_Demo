@@ -64,12 +64,13 @@
 
       canvas.style.width = rotatedWidth + "px";
       canvas.style.height = rotatedHeight + "px";
-      canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
       canvas.style.top = "50%";
       canvas.style.left = "50%";
       canvas.style.position = "absolute";
       canvas.style.transformOrigin = "center center";
       canvas.aspectRatio = aspectRatio;
+      canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
+      
     }
 
       window.addEventListener("resize", applyRotationAndResize);
