@@ -15,17 +15,15 @@
 
     #unity-canvas {
       background: #231F20;
-      width: 100%;
-      height: 100%;
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 50%;
+      left: 50%;
       transform-origin: center center;
     }
   </style>
 </head>
 <body>
-  <canvas id="unity-canvas"  tabindex="-1"></canvas>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
   <script src="Build/Web.loader.js"></script>
   <script>
     const canvas = document.querySelector("#unity-canvas");
@@ -34,7 +32,6 @@
       return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     }
 
-    // 初始化 Unity
     function startUnity() {
       createUnityInstance(canvas, {
         arguments: [],
@@ -45,23 +42,50 @@
         companyName: "Tabsil",
         productName: "Kawaii Survivor Course",
         productVersion: "1.0",
-        matchWebGLToCanvasSize: true // 跟著 CSS canvas 尺寸，自動調整畫質
+        matchWebGLToCanvasSize: true
       });
     }
 
     if (isMobile()) {
-      // 嘗試鎖定橫向顯示（可能被拒絕）
+      // 嘗試鎖定橫向
       if (screen.orientation && screen.orientation.lock) {
         screen.orientation.lock("landscape").catch(err => {
           console.log("鎖定橫向失敗：", err);
         });
       }
 
-      // 手機上旋轉 canvas
-      canvas.style.transform = "rotate(90deg)";
+      function applyRotationAndResize() {
+        const screenW = window.innerWidth;
+        const screenH = window.innerHeight;
+        const aspectRatio = screenW / screenH;
+
+        // 旋轉後，寬高對調：canvas 寬 = 螢幕高，canvas 高 = 螢幕高 / 比例
+        const rotatedWidth = screenH;
+        const rotatedHeight = screenH / aspectRatio;
+
+        canvas.style.width = rotatedWidth + "px";
+        canvas.style.height = rotatedHeight + "px";
+        canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
+      }
+
+      // 設定位置
+      canvas.style.top = "50%";
+      canvas.style.left = "50%";
+      canvas.style.position = "absolute";
+      canvas.style.transformOrigin = "center center";
+
+      // 套用一次、並監聽 resize
+      applyRotationAndResize();
+      window.addEventListener("resize", applyRotationAndResize);
+    } else {
+      // 桌機：使用 100% 填滿
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.style.top = "0";
+      canvas.style.left = "0";
+      canvas.style.position = "absolute";
     }
 
-    // 所有裝置都使用 100% 尺寸（已在 CSS 設定）
     startUnity();
   </script>
 </body>
