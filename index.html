@@ -55,27 +55,22 @@
       }
 
       function applyRotationAndResize() {
-        const screenW = window.innerWidth;
-        const screenH = window.innerHeight;
-        const aspectRatio = screenH/screenW ;
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+      const aspectRatio = 960 / 600;
 
-        // 旋轉後，寬高對調：canvas 寬 = 螢幕高，canvas 高 = 螢幕高 / 比例
-        const rotatedWidth = screenH;
-        const rotatedHeight = screenH / aspectRatio;
+      const rotatedWidth = screenH;
+      const rotatedHeight = screenH / aspectRatio;
 
-        canvas.style.width = rotatedWidth + "px";
-        canvas.style.height = rotatedHeight + "px";
-        canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
-      }
-
-      // 設定位置
+      canvas.style.width = rotatedWidth + "px";
+      canvas.style.height = rotatedHeight + "px";
+      canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
       canvas.style.top = "50%";
       canvas.style.left = "50%";
       canvas.style.position = "absolute";
       canvas.style.transformOrigin = "center center";
+    }
 
-      // 套用一次、並監聽 resize
-      applyRotationAndResize();
       window.addEventListener("resize", applyRotationAndResize);
     } else {
       // 桌機：使用 100% 填滿
