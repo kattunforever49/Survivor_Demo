@@ -14,17 +14,33 @@
     }
 
     #unity-canvas {
-            display: block;
-            margin: 0;
-            width: 100vh;
-            height: 100vw;
-            box-sizing: border-box;
-            transform: translateX(calc(50vw - 50%)) translateY(calc(50vh - 50%)) rotate(90deg);
-        }
+      background: #231F20;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* 手機旋轉樣式 */
+    @media screen and (max-width: 1024px) and (orientation: portrait) {
+      #unity-canvas {
+        width: 100vh;
+        height: 100vw;
+        transform: translateX(calc(50vw - 50%)) translateY(calc(50vh - 50%)) rotate(90deg);
+        transform-origin: center center;
+      }
+    }
+
+    /* 桌機或橫向手機 */
+    @media screen and (min-width: 1025px), (orientation: landscape) {
+      #unity-canvas {
+        width: 100vw;
+        height: 100vh;
+      }
+    }
   </style>
 </head>
 <body>
-  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <canvas id="unity-canvas" width="960" height="600" tabindex="-1"></canvas>
   <script src="Build/Web.loader.js"></script>
   <script>
     const canvas = document.querySelector("#unity-canvas");
@@ -33,33 +49,27 @@
       return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     }
 
-    function startUnity() {
-      createUnityInstance(canvas, {
-        arguments: [],
-        dataUrl: "Build/Web.data.unityweb",
-        frameworkUrl: "Build/Web.framework.js.unityweb",
-        codeUrl: "Build/Web.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "Tabsil",
-        productName: "Kawaii Survivor Course",
-        productVersion: "1.0",
-        matchWebGLToCanvasSize: true
-      });
-    }
-
     if (isMobile()) {
-      // 嘗試鎖定橫向顯示（可能被拒絕）
+      // 嘗試鎖定橫向（可選）
       if (screen.orientation && screen.orientation.lock) {
         screen.orientation.lock("landscape").catch(err => {
           console.log("鎖定橫向失敗：", err);
         });
       }
-
-      // 手機上旋轉 canvas
-      // canvas.style.transform = "rotate(90deg)";
     }
 
-    startUnity();
+    // 啟動 Unity
+    createUnityInstance(canvas, {
+      arguments: [],
+      dataUrl: "Build/Web.data.unityweb",
+      frameworkUrl: "Build/Web.framework.js.unityweb",
+      codeUrl: "Build/Web.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Tabsil",
+      productName: "Kawaii Survivor Course",
+      productVersion: "1.0",
+      matchWebGLToCanvasSize: true
+    });
   </script>
 </body>
 </html>
