@@ -31,11 +31,11 @@
 
     if (isMobile()) {
       // 嘗試鎖定橫向
-      if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock("landscape").catch((err) => {
-          console.log("鎖定橫向失敗:", err);
-        });
-      }
+      // if (screen.orientation && screen.orientation.lock) {
+      //   screen.orientation.lock("landscape").catch((err) => {
+      //     console.log("鎖定橫向失敗:", err);
+      //   });
+      // }
 
       // 只旋轉，不調整大小或位置
       canvas.style.transform = "rotate(90deg)";
