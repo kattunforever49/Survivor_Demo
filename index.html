@@ -55,22 +55,22 @@
       }
 
       function applyRotationAndResize() {
-      const screenW = window.innerWidth;
-      const screenH = window.innerHeight;
-      const aspectRatio = 960 / 600;
+      // const screenW = window.innerWidth;
+      // const screenH = window.innerHeight;
+      // const aspectRatio = 960 / 600;
 
-      const rotatedWidth = screenH;
-      const rotatedHeight = screenH / aspectRatio;
+      // const rotatedWidth = screenH;
+      // const rotatedHeight = screenH / aspectRatio;
 
-      canvas.style.width = rotatedWidth + "px";
-      canvas.style.height = rotatedHeight + "px";
-      canvas.style.top = "50%";
-      canvas.style.left = "50%";
-      canvas.style.position = "absolute";
-      canvas.style.transformOrigin = "center center";
-      canvas.aspectRatio = aspectRatio;
+      // canvas.style.width = rotatedWidth + "px";
+      // canvas.style.height = rotatedHeight + "px";
+      // canvas.style.top = "50%";
+      // canvas.style.left = "50%";
+      // canvas.style.position = "absolute";
+      // canvas.style.transformOrigin = "center center";
+      // canvas.aspectRatio = 1.6;
       // canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
-      canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
+      canvas.style.transform = "rotate(90deg) ";
     }
     applyRotationAndResize();
 
