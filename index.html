@@ -1,41 +1,76 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | Kawaii Survivor Course</title>
-  </head>
-  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width=960 height=600 tabindex="-1" style="width: 960px; height: 600px; background: #231F20"></canvas>
-    <script src="Build/Web.loader.js"></script>
-    <script>
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Unity Web Player | Kawaii Survivor Course</title>
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: #000;
+      overflow: hidden;
+    }
+    #unity-canvas {
+      background: #231F20;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" width="960" height="600" tabindex="-1"></canvas>
+  <script src="Build/Web.loader.js"></script>
+  <script>
+    const canvas = document.querySelector("#unity-canvas");
 
-        var canvas = document.querySelector("#unity-canvas");
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        canvas.style.position = "fixed";
+    function isMobile() {
+      return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    }
 
-        document.body.style.textAlign = "left";
+    if (isMobile()) {
+      // 嘗試鎖定橫向（可能失敗）
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock("landscape").catch((err) => {
+          console.log("鎖定橫向失敗:", err);
+        });
       }
 
-      createUnityInstance(document.querySelector("#unity-canvas"), {
-        arguments: [],
-        dataUrl: "Build/Web.data.unityweb",
-        frameworkUrl: "Build/Web.framework.js.unityweb",
-        codeUrl: "Build/Web.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "Tabsil",
-        productName: "Kawaii Survivor Course",
-        productVersion: "1.0",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-      });
-    </script>
-  </body>
+      // 設定旋轉樣式
+      function applyCanvasRotation() {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        canvas.style.width = h + "px";
+        canvas.style.height = w + "px";
+        canvas.style.transform = "rotate(90deg) translate(-50%, -50%)";
+        canvas.style.transformOrigin = "center center";
+        canvas.style.position = "absolute";
+        canvas.style.top = "50%";
+        canvas.style.left = "50%";
+      }
+
+      applyCanvasRotation();
+      window.addEventListener('resize', applyCanvasRotation);
+    } else {
+      // 桌機版維持原尺寸
+      canvas.style.width = "960px";
+      canvas.style.height = "600px";
+      canvas.style.margin = "0 auto";
+      canvas.style.display = "block";
+    }
+
+    // 建立 Unity 實例
+    createUnityInstance(canvas, {
+      arguments: [],
+      dataUrl: "Build/Web.data.unityweb",
+      frameworkUrl: "Build/Web.framework.js.unityweb",
+      codeUrl: "Build/Web.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Tabsil",
+      productName: "Kawaii Survivor Course",
+      productVersion: "1.0"
+    });
+  </script>
+</body>
 </html>
