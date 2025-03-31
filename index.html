@@ -1,75 +1,54 @@
-<!DOCTYPE html>
-<html lang="en-us">
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Unity Web Player | Kawaii Survivor Course</title>
-  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes" />
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      overflow: hidden;
-    }
-
-    #unity-canvas {
-      background: #231F20;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    /* 手機旋轉樣式 */
-    @media screen and (max-width: 1024px) and (orientation: portrait) {
-      #unity-canvas {
-        width: 100vh;
-        height: 100vw;
-        transform: translateX(calc(50vw - 50%)) translateY(calc(50vh - 50%)) rotate(90deg);
-        transform-origin: center center;
-      }
-    }
-
-    /* 桌機或橫向手機 */
-    @media screen and (min-width: 1025px), (orientation: landscape) {
-      #unity-canvas {
-        width: 100vw;
-        height: 100vh;
-      }
-    }
-  </style>
-</head>
-<body>
-  <canvas id="unity-canvas" width="100vw" height="100vh" tabindex="-1"></canvas>
-  <script src="Build/Web.loader.js"></script>
-  <script>
-    const canvas = document.querySelector("#unity-canvas");
-
-    function isMobile() {
-      return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    }
-
-    if (isMobile()) {
-      // 嘗試鎖定橫向（可選）
-      if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock("landscape").catch(err => {
-          console.log("鎖定橫向失敗：", err);
-        });
-      }
-    }
-
-    // 啟動 Unity
-    createUnityInstance(canvas, {
-      arguments: [],
-      dataUrl: "Build/Web.data.unityweb",
-      frameworkUrl: "Build/Web.framework.js.unityweb",
-      codeUrl: "Build/Web.wasm.unityweb",
-      streamingAssetsUrl: "StreamingAssets",
-      companyName: "Tabsil",
-      productName: "Kawaii Survivor Course",
-      productVersion: "1.0",
-      matchWebGLToCanvasSize: false
-    });
-  </script>
-</body>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Kawaii Survivor Course</title>
+		<link rel="shortcut icon" href="TemplateData/favicon.ico">	
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="webglScreen.js"></script>
+	</head>
+	<body style="margin: 0; overflow:hidden">
+		<iframe id="Frame"  src="game.html" style="border-width:1px;position:absolute;"></iframe>
+		<script>
+			//开始时调用
+			window.gameframe = document.getElementById("Frame");
+			window.WebglOrientation=WebglScreenOrientation.AutoRotation
+			RotScreen()
+			window.addEventListener("resize", function () {
+				RotScreen();
+			})
+			window.addEventListener("orientationchange", function () {
+					RotScreen();
+			})
+		</script>
+		<script>
+			const Http = new XMLHttpRequest();
+			const url="StreamingAssets/webglscreenSetting/ScreenConfig.json";
+			// 创建一个新的 XMLHttpRequest 对象  
+			var xhr = new XMLHttpRequest();  
+			
+			// 设置请求类型为 GET，并指定请求的 URL  
+			
+			// 设置请求完成后的回调函数  
+			xhr.onreadystatechange = function () {  
+				// 检查请求是否成功完成（状态码为 200）  
+				if (xhr.readyState === 4 && xhr.status === 200) {  
+					// 读取响应文本  
+					var json = xhr.responseText;  
+					// 解析 JSON 字符串为 JavaScript 对象  
+					var data = JSON.parse(json);  
+					// 将解析后的数据中的 ScreenOrientation 赋值给 window.WebglOrientation  
+					window.WebglOrientation = data.ScreenOrientation;  
+					// 调用 RotScreen 函数（假设该函数已定义）  
+					RotScreen();  
+				}  
+			};  
+			xhr.open("GET", url, true);  
+			xhr.send()
+		</script>
+		<style>
+			
+		</style>
+	</body>
+	
 </html>
